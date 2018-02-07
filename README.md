@@ -7,21 +7,27 @@ There is no API for getting real-time data from HoboLink. The provided data expo
 
 This script uses [CasperJS](http://casperjs.org) to emulate a web browser and pull down the data directly from the public facing charts provided by OnSet through HoboLink. Currently it is designed to be run at least daily to gather data for the past 24 hours.
 
-There are two ways to run the script
+There are three ways to run the script
 
-* Standalone with a local install of CasperJS, PhantomJS, and NodeJS.
-* In a Docker container that contains the dependencies.
+* Standalone with a local install NodeJS that dumps to a local directory.
+* In a Docker container that dumps to a local directory.
+* In a Docker container that POSTs the data to a URL.
 
-## Standalone Install and Execution
+## Standalone Local Download
 
 * Run `npm install --production` to prepare the script and install dependencies.
 * Run `npm start` to download data for the past 24 hours run (repeat as needed).
 
-## Dockerized Install and Execution
+## Dockerized Local Download
 
-* Run `build.sh`: build Docker image with script and dependencies.
+* Run `build.sh` to build Docker image with script and dependencies.
 * Edit `run.sh` to set the export location `EXPORT_DIR`
 * Run `run.sh` to download data for the past 24 hours run (repeat as needed).
+
+## Dockerised POST Download/Upload
+
+* Run `build.sh` to build the Docker image with script and dependencies
+* Edit 
 
 ## Where's the data?
 
