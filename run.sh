@@ -1,5 +1,7 @@
 #!/bin/bash
+#
+# Set this to be the location you want the data stored
+EXPORT_DIR=$(pwd)
 
-docker run --rm -v $(pwd):/data stephenhouser/hobo-scrape
-
-#docker run --rm stephenhouser/hobo-scrape casperjs --version -v .:/home/casperjs-tests npm start
+# Run the docker container to dump the data
+docker run --rm -v $EXPORT_DIR:/data stephenhouser/hobo-scrape
