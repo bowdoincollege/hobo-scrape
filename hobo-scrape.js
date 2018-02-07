@@ -6,6 +6,7 @@ var sensors = {
 	"stream": 'af109c8068362219390a99cec629f0f6'
 };
 
+var export_dir = '';
 var hobo_base_url = 'https://www.hobolink.com/p/';
 var sensor_id = null;
 
@@ -45,8 +46,9 @@ casper.then(function() {
 		this.bypass(1);
 	}	
 
+	export_dir = casper.cli.args[0];
 	sensor_id = sensors[casper.cli.args[0]];
-	this.echo("Downloading data for [" + hobo_base_url + sensor_id + "]...");
+	//this.echo("Downloading data for [" + hobo_base_url + sensor_id + "]...");
 });
 
 casper.then(function() {
@@ -119,7 +121,11 @@ casper.run(function() {
 		var header_suffux = charts[key].measurement + ':' + charts[key].units;
 		lines[0] = fixup_headers(lines[0], header_suffux);
 
-		fs.write(key + '.csv', lines.join('\n'), 'w');
+		if (!fs.isDirectory(export_dir)) {
+			fs.makeDirectory(export_dir);
+		}
+
+		fs.write(export_dir + '/' + key + '.csv', lines.join('\n'), 'w');
 	}
 
     this.exit();

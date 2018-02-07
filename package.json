@@ -9,7 +9,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "casperjs hobo-scrape.js tower",
+    "start": "for i in tower stream ; do npm run --silent $i; done",
+    "tower": "casperjs hobo-scrape.js tower",
+    "stream": "casperjs hobo-scrape.js stream",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Stephen Houser",
