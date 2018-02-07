@@ -1,14 +1,15 @@
 {
-  "name": "scrape-hobo",
+  "name": "hobo-scrape",
   "version": "1.0.0",
   "description": "Download sensor data from OnSet HoboLink",
-  "main": "scrape-hobo.js",
+  "main": "hobo-scrape.js",
   "dependencies": {
     "casperjs": "^1.1.4",
     "phantomjs": "^2.1.7"
   },
   "devDependencies": {},
   "scripts": {
+    "start": "casperjs hobo-scrape.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Stephen Houser",
