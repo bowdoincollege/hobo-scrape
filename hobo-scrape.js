@@ -1,10 +1,15 @@
 var casper = require('casper').create();
 var fs = require('fs');
 
-var sensor_id = '2665cb0a357c93fc10bb84162133c89d';	//tower
-var sensor_id = 'af109c8068362219390a99cec629f0f6';	//stream
+var sensors = { 
+	'tower': '2665cb0a357c93fc10bb84162133c89d',
+	"stream": 'af109c8068362219390a99cec629f0f6'
+};
 
-//casper.options.waitTimeout = 10000; // default 10 second timeout
+var hobo_base_url = 'https://www.hobolink.com/p/';
+var sensor_id = null;
+
+casper.options.waitTimeout = 10000; // default 10 second timeout
 
 function parse_chart_data(raw_chart_data) {
 	var match_groups = raw_chart_data.match(/var\W+(\w+)\W+(Date,.*)'/);
@@ -21,16 +26,38 @@ function parse_chart_data(raw_chart_data) {
 	return lines;
 }
 
-casper.start('https://www.hobolink.com/p/' + sensor_id, function() {
-   this.echo('Loading initial page...');
-   this.waitForSelector('a[href="#tab3"]');
+function fixup_headers(header_line, header_suffux) {
+	var headers = header_line.split(',');
+	for (var f = 1; f < headers.length; f++) {
+		headers[f] = headers[f] + ':' + header_suffux;
+	}
 
+	return headers.join(',');
+}
+
+casper.start();
+
+casper.then(function() {
+	var sensor_name = casper.cli.args[0];
+	if (casper.cli.args.length < 1 || !casper.cli.args[0] in sensors) {
+		this.echo("Must specify sensor to download data for: " + Object.keys(sensors).join(","));
+		this.exit(1);
+		this.bypass(1);
+	}	
+
+	sensor_id = sensors[casper.cli.args[0]];
+	this.echo("Downloading data for [" + hobo_base_url + sensor_id + "]...");
 });
 
-casper.thenClick('a[href="#tab3"]', function(){
-	this.echo('Waiting for tab to load...');
-	this.waitForSelector('.graphs > div font');
+casper.then(function() {
+	this.open(hobo_base_url + sensor_id);
 });
+
+casper.waitForSelector('a[href="#tab3"]');
+
+casper.thenClick('a[href="#tab3"]');
+
+casper.waitForSelector('.graphs > div font');
 
 //casper.wait(5000);
 casper.waitFor(function() {
@@ -77,20 +104,21 @@ casper.then(function() {
 // Parse chart data from script variable assignment
 casper.then(function() {
 	for (var key in charts) {
-		// Save out for debug
-		fs.write(key + '.csv', charts[key].script, 'w');
-		
+		// Write out raw script data (debugging)
+		//fs.write(key + '.script', charts[key].script, 'w');
+
 		charts[key].data = parse_chart_data(charts[key].script);
 	}
 });
 
 casper.run(function() {
-	for (var key in charts) {		
-		console.log('----------------');
-		console.log(key + ' : ' + charts[key].measurement + ', ' + charts[key].units);
-
+	for (var key in charts) {
+		//console.log(key + ' : ' + charts[key].measurement + ', ' + charts[key].units);
 		var lines = charts[key].data;
-		lines[0] = 'Date,' + charts[key].measurement + ':' + charts[key].units;
+
+		var header_suffux = charts[key].measurement + ':' + charts[key].units;
+		lines[0] = fixup_headers(lines[0], header_suffux);
+
 		fs.write(key + '.csv', lines.join('\n'), 'w');
 	}
 

@@ -9,7 +9,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "casperjs hobo-scrape.js",
+    "start": "casperjs hobo-scrape.js tower",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Stephen Houser",
