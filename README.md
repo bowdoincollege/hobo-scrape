@@ -16,19 +16,30 @@ There are three ways to run the script
 ## Standalone Local Download
 
 * Run `npm install --production` to prepare the script and install dependencies.
-* Run `npm start` to download data for the past 24 hours run (repeat as needed).
+* Run `npm start` to download data for the past 24 hours into `./data` (repeat as needed).
 
 ## Dockerized Local Download
 
 * Run `build.sh` to build Docker image with script and dependencies.
-* Edit `run.sh` to set the export location `EXPORT_DIR`
-* Run `run.sh` to download data for the past 24 hours run (repeat as needed).
+* To download to `./data`, run something like:
+
+```
+docker run --rm -v "$(pwd)/data":/data stephenhouser/hobo-scrape \
+	/data \
+	2665cb0a357c93fc10bb84162133c89d af109c8068362219390a99cec629f0f6
+```
 
 ## Dockerised POST Download/Upload
 
 * Run `build.sh` to build the Docker image with script and dependencies
-* Edit 
+* To download and post data to a waiting endpoint, run something like:
+
+```
+docker run --rm	stephenhouser/hobo-scrape \
+	http://e-axiom.bowdoin.edu/node-red/hobolonk/upload \
+	2665cb0a357c93fc10bb84162133c89d af109c8068362219390a99cec629f0f6
+```
 
 ## Where's the data?
 
-The script creates several `.csv` files, one for each chart/sensor attached to a station in a directory with the station's name. We (Bowdoin) have two stations; `tower` and `stream`. `tower` is the only active one at the time of this writing. Each file is named for the sensor id assigned by HoboLink.
+The script creates several `.csv` files, one for each chart/sensor attached to a station in the output directory. We (Bowdoin) have two stations; `tower` and `stream`. `tower` is the only active one at the time of this writing. Each file is named for the sensor id assigned by HoboLink.

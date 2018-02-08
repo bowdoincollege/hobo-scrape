@@ -5,7 +5,7 @@ var export_dir = '';
 var hobo_base_url = 'https://www.hobolink.com/p/';
 var sensor_id = null;
 
-casper.options.waitTimeout = 10000; // default 10 second timeout
+//casper.options.waitTimeout = 5000;	// default is 5000 (5 seconds)
 
 function parse_chart_data(raw_chart_data) {
 	var match_groups = raw_chart_data.match(/var\W+(\w+)\W+(Date,.*)'/);
@@ -36,27 +36,29 @@ casper.start();
 casper.then(function() {
 	var sensor_name = casper.cli.args[0];
 	if (casper.cli.args.length < 2) {
-		this.echo('Syntax: hobo-scrape.js <station-id> <output-directory>');
+		this.echo('Syntax: hobo-scrape.js <output-directory> <station-id>');
 		this.exit(1);
 		this.bypass(1);
 	}	
 
-	export_dir = casper.cli.args[1];
-	sensor_id = casper.cli.args[0];
-	//this.echo('Downloading data for [' + hobo_base_url + sensor_id + '] to [' + export_dir + ']');
+	export_dir = casper.cli.args[0];
+	sensor_id = casper.cli.args[1];
 });
 
 casper.then(function() {
+	this.echo('Open page [' + hobo_base_url + sensor_id + '].');
 	this.open(hobo_base_url + sensor_id);
 });
 
 casper.waitForSelector('a[href="#tab3"]');
 
-casper.thenClick('a[href="#tab3"]');
+casper.thenClick('a[href="#tab3"]', function() {
+	this.echo('Wait for charts to load...');
+});
 
 casper.waitForSelector('.graphs > div font');
 
-casper.waitFor(function() {
+casper.waitFor(function() {	
 	var charts = casper.getElementsInfo('.graphs > div');
 	//console.log('There are ' + charts.length + ' charts');
 
@@ -82,6 +84,7 @@ casper.waitFor(function() {
 
 var charts = {};
 casper.then(function() {
+	this.echo('Parse chart data...');
 	charts = casper.evaluate(function(cssSelector) {
 		var obj = {};
 		__utils__.findAll(cssSelector).forEach(function(el){
@@ -100,6 +103,7 @@ casper.then(function() {
 // Parse chart data from script variable assignment
 casper.then(function() {
 	for (var key in charts) {
+		this.echo('Found sensor [' + key + '].');
 		// Write out raw script data (debugging)
 		//fs.write(key + '.script', charts[key].script, 'w');
 
@@ -119,7 +123,9 @@ casper.run(function() {
 			fs.makeDirectory(export_dir);
 		}
 
-		fs.write(export_dir + '/' + key + '.csv', lines.join('\n'), 'w');
+		var fn = export_dir + '/' + key + '.csv';
+		fs.write(fn, lines.join('\n'), 'w');
+		this.echo('Saved [' + fn + '].');
 	}
 
     this.exit();
