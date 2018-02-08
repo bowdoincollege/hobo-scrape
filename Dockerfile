@@ -10,12 +10,13 @@
 #    docker run -d --name casperjs-daemon -v /home/ubuntu/test:/mnt/test --restart always vitr/casperjs
 
 FROM vitr/casperjs
-
 MAINTAINER Stephen Houser
+
+RUN apt-get update && apt-get install curl -y
 
 COPY entrypoint.sh .
 COPY hobo-scrape.js .
 
 VOLUME /data
 
-CMD ["./entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]

@@ -1,11 +1,6 @@
 var casper = require('casper').create();
 var fs = require('fs');
 
-var sensors = { 
-	'tower': '2665cb0a357c93fc10bb84162133c89d',
-	"stream": 'af109c8068362219390a99cec629f0f6'
-};
-
 var export_dir = '';
 var hobo_base_url = 'https://www.hobolink.com/p/';
 var sensor_id = null;
@@ -40,15 +35,15 @@ casper.start();
 
 casper.then(function() {
 	var sensor_name = casper.cli.args[0];
-	if (casper.cli.args.length < 1 || !casper.cli.args[0] in sensors) {
-		this.echo("Must specify sensor to download data for: " + Object.keys(sensors).join(","));
+	if (casper.cli.args.length < 2) {
+		this.echo('Syntax: hobo-scrape.js <station-id> <output-directory>');
 		this.exit(1);
 		this.bypass(1);
 	}	
 
-	export_dir = casper.cli.args[0];
-	sensor_id = sensors[casper.cli.args[0]];
-	//this.echo("Downloading data for [" + hobo_base_url + sensor_id + "]...");
+	export_dir = casper.cli.args[1];
+	sensor_id = casper.cli.args[0];
+	//this.echo('Downloading data for [' + hobo_base_url + sensor_id + '] to [' + export_dir + ']');
 });
 
 casper.then(function() {
@@ -61,7 +56,6 @@ casper.thenClick('a[href="#tab3"]');
 
 casper.waitForSelector('.graphs > div font');
 
-//casper.wait(5000);
 casper.waitFor(function() {
 	var charts = casper.getElementsInfo('.graphs > div');
 	//console.log('There are ' + charts.length + ' charts');
