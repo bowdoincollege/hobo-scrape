@@ -38,9 +38,10 @@ or, more cleanly,
 NOTE: Influx may not do well with importing more than 5,000 points at a time[1](https://docs.influxdata.com/influxdb/v1.4/tools/shell/).
 
 ```
-for f in ../*.zip
+for f in ../../ArchiveData/*.csv
 do
-	./hobolink_zip_import $f
+	echo "Import $f"
+	./hobolink_csv_import $f
 	# let influx catch up...
 	sleep 10
 done

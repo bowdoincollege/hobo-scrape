@@ -13,6 +13,8 @@ There are three ways to run the script
 * In a Docker container that dumps to a local directory.
 * In a Docker container that POSTs the data to a URL.
 
+NOTE: The dates and times in exported data are in the LOCAL TIMEZONE. Data exported from the HoboLink website have a configurable time zone, which is set to UTC for Bowdoin.
+
 ## Standalone Local Download
 
 * Run `npm install --production` to prepare the script and install dependencies.
@@ -43,3 +45,16 @@ docker run --rm	stephenhouser/hobo-scrape \
 ## Where's the data?
 
 The script creates several `.csv` files, one for each chart/sensor attached to a station in the output directory. We (Bowdoin) have two stations; `tower` and `stream`. `tower` is the only active one at the time of this writing. Each file is named for the sensor id assigned by HoboLink.
+
+
+
+drop measurement battery
+drop measurement dew_point
+drop measurement gust_speed
+drop measurement humidity
+drop measurement par_ue
+drop measurement rain
+drop measurement solar_radiation
+drop measurement temperature
+drop measurement wind_direction
+drop measurement wind_speed

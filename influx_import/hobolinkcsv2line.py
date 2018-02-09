@@ -7,7 +7,8 @@ import re
 import gzip
 import argparse
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
+from time import strptime
 
 ENCODING = 'mac_roman'
 CSV_DIALECT = 'excel'
@@ -103,6 +104,11 @@ CREATE DATABASE dashboard
 
 """)
 
+def parse_utc_datetime(utc_dt_string):
+    agnostic_time = strptime(utc_dt_string, '%m/%d/%y %H:%M:%S')
+    utc_datetime = datetime(*agnostic_time[0:7], timezone.utc)
+    return utc_datetime
+
 def main():
     aparser = argparse.ArgumentParser()
     aparser.add_argument("-l", "--log", nargs='?', 
@@ -138,7 +144,7 @@ def main():
             if measurement == "ignore":
                 pass
             elif measurement == "timestamp":
-                timestamp = datetime.strptime(value, '%m/%d/%y %H:%M:%S')
+                timestamp = parse_utc_datetime(value)
             elif timestamp != None and value != "":
                 tstamp = int(timestamp.timestamp())
                 clean_value = value
