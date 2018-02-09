@@ -8,9 +8,13 @@ if [[ $1 == "local" ]]; then
 	docker run --rm -v "$(pwd)/data":/data \
 		stephenhouser/hobo-scrape -o /data ${stations}
 else
+	if [[ $1 == "daemon" ]]; then
+		daemon="-d"
+	fi
+
 	# Run the docker container and post to e-axiom dashboard (url above)
 	post_url=http://e-axiom.bowdoin.edu/node-red/hobolink/upload
 
 	docker run --rm	\
-		stephenhouser/hobo-scrape -p ${post_url} ${stations}
+		stephenhouser/hobo-scrape ${daemon} -p ${post_url} ${stations}
 fi
