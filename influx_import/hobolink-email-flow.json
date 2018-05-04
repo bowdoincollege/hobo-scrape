@@ -1,0 +1,210 @@
+[
+	{
+		"id": "335681cb.229416",
+		"type": "http in",
+		"z": "799cedf2.b97c84",
+		"name": "",
+		"url": "/hobolink",
+		"method": "get",
+		"upload": false,
+		"swaggerDoc": "",
+		"x": 130,
+		"y": 180,
+		"wires": [
+			[
+				"87cc1734.cf74b"
+			]
+		]
+	},
+	{
+		"id": "6c8891b6.a1dc9",
+		"type": "http response",
+		"z": "799cedf2.b97c84",
+		"name": "",
+		"statusCode": "",
+		"headers": {},
+		"x": 670,
+		"y": 200,
+		"wires": []
+	},
+	{
+		"id": "623b597a.bf14f",
+		"type": "template",
+		"z": "799cedf2.b97c84",
+		"name": "Dropzone",
+		"field": "payload",
+		"fieldType": "msg",
+		"format": "handlebars",
+		"syntax": "mustache",
+		"template": "<html>\n    <head>\n        <script src=\"https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/dropzone.js\"></script>\n        <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/dropzone.css\">\n        <script>Dropzone.options.csvUpload = false;</script>\n\n        <style>\n            body {\n                background: rgb(243, 244, 245);\n                height: 100%;\n                color: rgb(100, 108, 127);\n                line-height: 1.4rem;\n                font-family: Roboto, \"Open Sans\", sans-serif;\n                font-size: 20px;\n                font-weight: 300;\n                text-rendering: optimizeLegibility;\n            }\n            \n            h1 { text-align: center; }\n            .center { text-align: center; }\n            \n            .dropzone {\n                background: white;\n                border-radius: 5px;\n                border: 2px dashed rgb(0, 135, 247);\n                border-image: none;\n                max-width: 500px;\n                margin-left: auto;\n                margin-right: auto;\n            }\n        </style>\n    </head>\n    <body>\n        <div id=\"Xdropzone\">\n            <h1>Upload New Data</h1>\n            <form class=\"dropzone needsclick\" id=\"csv-upload\" action=\"{{db_name}}/upload\">\n              <div class=\"dz-message needsclick\">    \n                Drop files here or click to upload.<br/>\n                <span class=\"note needsclick\">(These should be CSV files exported from OnSet's Hobolink site)</span>\n              </div>\n            </form>\n        </div>\n    \n        <div class=\"center\">\n            <p><span id=\"recordCount\">...</span> measurements.</p>\n        </div>\n    \n        <div id=\"preview-template\" style=\"display: none;\">\n            <div class=\"dz-preview dz-file-preview\">\n                <div class=\"dz-image\"><img data-dz-thumbnail=\"\" /></div>\n                <div class=\"dz-details\">\n                    <DIV class=\"dz-size\"><SPAN data-dz-size=\"\"></SPAN></DIV>\n                    <DIV class=\"dz-filename\"><SPAN data-dz-name=\"\"></SPAN></DIV>\n                </div>\n                <DIV class=\"dz-progress\"><SPAN class=\"dz-upload\" \n        data-dz-uploadprogress=\"\"></SPAN></DIV>\n                <DIV class=\"dz-error-message\"><SPAN data-dz-errormessage=\"\"></SPAN></DIV>\n                <div class=\"dz-success-mark\">\n                    <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">\n                        <title>Check</title>\n                        <desc>Created with Sketch.</desc>\n                        <defs></defs>\n                        <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">\n                            <path d=\"M23.5,31.8431458 L17.5852419,25.9283877 C16.0248253,24.3679711 13.4910294,24.366835 11.9289322,25.9289322 C10.3700136,27.4878508 10.3665912,30.0234455 11.9283877,31.5852419 L20.4147581,40.0716123 C20.5133999,40.1702541 20.6159315,40.2626649 20.7218615,40.3488435 C22.2835669,41.8725651 24.794234,41.8626202 26.3461564,40.3106978 L43.3106978,23.3461564 C44.8771021,21.7797521 44.8758057,19.2483887 43.3137085,17.6862915 C41.7547899,16.1273729 39.2176035,16.1255422 37.6538436,17.6893022 L23.5,31.8431458 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" stroke-opacity=\"0.198794158\" stroke=\"#747474\" fill-opacity=\"0.816519475\" fill=\"#FFFFFF\" sketch:type=\"MSShapeGroup\"></path>\n                        </g>\n                    </svg>\n                </div>\n                <div class=\"dz-error-mark\">\n                  <svg width=\"54px\" height=\"54px\" viewBox=\"0 0 54 54\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:sketch=\"http://www.bohemiancoding.com/sketch/ns\">\n                      <title>error</title>\n                      <desc>Created with Sketch.</desc>\n                      <defs></defs>\n                      <g id=\"Page-1\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\" sketch:type=\"MSPage\">\n                          <g id=\"Check-+-Oval-2\" sketch:type=\"MSLayerGroup\" stroke=\"#747474\" stroke-opacity=\"0.198794158\" fill=\"#FFFFFF\" fill-opacity=\"0.816519475\">\n                              <path d=\"M32.6568542,29 L38.3106978,23.3461564 C39.8771021,21.7797521 39.8758057,19.2483887 38.3137085,17.6862915 C36.7547899,16.1273729 34.2176035,16.1255422 32.6538436,17.6893022 L27,23.3431458 L21.3461564,17.6893022 C19.7823965,16.1255422 17.2452101,16.1273729 15.6862915,17.6862915 C14.1241943,19.2483887 14.1228979,21.7797521 15.6893022,23.3461564 L21.3431458,29 L15.6893022,34.6538436 C14.1228979,36.2202479 14.1241943,38.7516113 15.6862915,40.3137085 C17.2452101,41.8726271 19.7823965,41.8744578 21.3461564,40.3106978 L27,34.6568542 L32.6538436,40.3106978 C34.2176035,41.8744578 36.7547899,41.8726271 38.3137085,40.3137085 C39.8758057,38.7516113 39.8771021,36.2202479 38.3106978,34.6538436 L32.6568542,29 Z M27,53 C41.3594035,53 53,41.3594035 53,27 C53,12.6405965 41.3594035,1 27,1 C12.6405965,1 1,12.6405965 1,27 C1,41.3594035 12.6405965,53 27,53 Z\" id=\"Oval-2\" sketch:type=\"MSShapeGroup\"></path>\n                          </g>\n                      </g>\n                  </svg>\n                </div>\n            </div>\n        </div>\n\n        <script>\n            var dropzone = new Dropzone('#csv-upload', {\n              previewTemplate: document.querySelector('#preview-template').innerHTML,\n              parallelUploads: 2,\n              thumbnailHeight: 80,\n              thumbnailWidth: 80,\n              maxFilesize: 3,\n              filesizeBase: 1000,\n              thumbnail: function(file, dataUrl) {\n                if (file.previewElement) {\n                  file.previewElement.classList.remove(\"dz-file-preview\");\n                  var images = file.previewElement.querySelectorAll(\"[data-dz-thumbnail]\");\n                  for (var i = 0; i < images.length; i++) {\n                    var thumbnailElement = images[i];\n                    thumbnailElement.alt = file.name;\n                    thumbnailElement.src = dataUrl;\n                  }\n                  setTimeout(function() { file.previewElement.classList.add(\"dz-image-preview\"); }, 1);\n                }\n              }\n            });\n\n            function getRecordCount() {\n                var xhttp = new XMLHttpRequest();\n                xhttp.onreadystatechange = function() {\n                    if (this.readyState == 4 && this.status == 200) {\n                        var recordCount = 0;\n                        var response = JSON.parse(this.responseText);\n                        if (response.length == 1) {\n                            recordCount = response[0].count;\n                        }\n                        document.getElementById(\"recordCount\").innerHTML = recordCount;\n                    }\n                };\n                xhttp.open(\"GET\", \"{{db_name}}/count\", true);\n                xhttp.send();\n            }\n            \n            getRecordCount();\n            setInterval(function(){ getRecordCount(); }, 5000);\n        </script>\n    </body>\n</html>",
+		"output": "str",
+		"x": 500,
+		"y": 180,
+		"wires": [
+			[
+				"6c8891b6.a1dc9"
+			]
+		]
+	},
+	{
+		"id": "9178fa01.66fcc",
+		"type": "http in",
+		"z": "799cedf2.b97c84",
+		"name": "",
+		"url": "/hobolink/count",
+		"method": "get",
+		"upload": false,
+		"swaggerDoc": "",
+		"x": 110,
+		"y": 240,
+		"wires": [
+			[
+				"91a4eb42.9fc2c8"
+			]
+		]
+	},
+	{
+		"id": "9214965d.4d27c",
+		"type": "http in",
+		"z": "799cedf2.b97c84",
+		"name": "",
+		"url": "/hobolink/upload",
+		"method": "post",
+		"upload": true,
+		"swaggerDoc": "",
+		"x": 100,
+		"y": 300,
+		"wires": [
+			[
+				"a169ecaf.c75d9"
+			]
+		]
+	},
+	{
+		"id": "87cc1734.cf74b",
+		"type": "change",
+		"z": "799cedf2.b97c84",
+		"name": "",
+		"rules": [
+			{
+				"t": "set",
+				"p": "db_name",
+				"pt": "msg",
+				"to": "hobolink",
+				"tot": "str"
+			}
+		],
+		"action": "",
+		"property": "",
+		"from": "",
+		"to": "",
+		"reg": false,
+		"x": 310,
+		"y": 180,
+		"wires": [
+			[
+				"623b597a.bf14f"
+			]
+		]
+	},
+	{
+		"id": "90d248f5.3fdec",
+		"type": "comment",
+		"z": "799cedf2.b97c84",
+		"name": "Upload HoboLink Data",
+		"info": "",
+		"x": 120,
+		"y": 60,
+		"wires": []
+	},
+	{
+		"id": "91a4eb42.9fc2c8",
+		"type": "influxdb in",
+		"z": "799cedf2.b97c84",
+		"influxdb": "78c8c711.527828",
+		"name": "Measurements",
+		"query": "select count(value) from \"temperature\"",
+		"rawOutput": false,
+		"precision": "",
+		"retentionPolicy": "",
+		"x": 320,
+		"y": 240,
+		"wires": [
+			[
+				"6c8891b6.a1dc9"
+			]
+		]
+	},
+	{
+		"id": "a169ecaf.c75d9",
+		"type": "function",
+		"z": "799cedf2.b97c84",
+		"name": "Extract Uploaded File",
+		"func": "msg.payload = String(msg.req.files[0].buffer);\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 180,
+		"y": 340,
+		"wires": [
+			[
+				"13667e6e.388192",
+				"6c8891b6.a1dc9"
+			]
+		]
+	},
+	{
+		"id": "53c3c92.5ebf038",
+		"type": "debug",
+		"z": "799cedf2.b97c84",
+		"name": "",
+		"active": false,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "payload",
+		"x": 510,
+		"y": 380,
+		"wires": []
+	},
+	{
+		"id": "13667e6e.388192",
+		"type": "function",
+		"z": "799cedf2.b97c84",
+		"name": "Parse HoboLink CSV",
+		"func": "\nfunction header_name(key) {\n\tvar header_names = {\n\t\t\"rh\": \"humidity\",\n\t\t\"par\": \"par_ue\"\n\t};\n\n\tif (key in header_names) {\n\t\treturn header_names[key];\n\t}\n\n\treturn key;\n}\n\nfunction clean_token(token) {\n\treturn token.replace(/\"/g, \"\").trim().replace(/ /g, \"_\").toLowerCase();\n}\n\nvar lines = msg.payload.split('\\n');\nvar raw_headers = lines[0].match(/(\".*?\"|[^\",\\s]+)(?=\\s*,|\\s*$)/g);\nvar headers = [];\nvar location = [];\nfor (var i = 0; i < raw_headers.length; i++) {\n\tvar header_parts = raw_headers[i].split(\",\");\n\theaders[i] = header_name(clean_token(header_parts[0]));\n\tif (header_parts.length >= 3) {\n\t\tlocation[i] = clean_token(header_parts[2]);\n\t}\n}\n\nvar date_field_index = null;\nfor (var i = 0; i < headers.length; i++) {\n\tif (headers[i].match(/date/i)) {\n\t\tdate_field_index = i;\n\t\tbreak;\n\t}\n}\n\nbatch_size = 100;\nmsg.payload = [];\nfor (var l = 1; l < lines.length; l++) {\n\tvar fields = lines[l].split(\",\")\n\tvar timestamp = Date.parse(fields[date_field_index]);\n\tfor (var f = date_field_index + 1; f < fields.length; f++) {\n\t\tvar value = clean_token(fields[f]);\n\t\tif (value !== null && value !== '' && !isNaN(Number(value))) {\n\t\t\tvar point = {\n\t\t\t\t'measurement': headers[f],\n\t\t\t\t'timestamp': timestamp,\n\t\t\t\t'fields': { 'value': Number(value) },\n\t\t\t\t'tags': {}\n\t\t\t};\n\n\t\t\tif (location[f] !== null) {\n\t\t\t\tpoint.tags.location = location[f];\n\t\t\t}\n\n\t\t\tmsg.payload.push(point);\n\t\t\tif (msg.payload.length >= batch_size) {\n\t\t\t    //console.log(msg);\n\t\t\t\tnode.send(msg);\n\t\t\t\tmsg.payload = [];\n\t\t\t}\n\t\t} else {\n\t\t    //console.log(\"\" + headers[f] + \" = [\" + fields[f] + \"]\");\n\t\t}\n\t}\n}\n\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"x": 240,
+		"y": 380,
+		"wires": [
+			[
+				"53c3c92.5ebf038",
+				"ac557fbc.a59058"
+			]
+		]
+	},
+	{
+		"id": "ac557fbc.a59058",
+		"type": "influxdb batch",
+		"z": "799cedf2.b97c84",
+		"influxdb": "78c8c711.527828",
+		"precision": "ms",
+		"retentionPolicy": "",
+		"name": "",
+		"x": 550,
+		"y": 460,
+		"wires": []
+	},
+	{
+		"id": "78c8c711.527828",
+		"type": "influxdb",
+		"z": "",
+		"hostname": "influxdb",
+		"port": "8086",
+		"protocol": "http",
+		"database": "dashboard",
+		"name": "",
+		"usetls": false,
+		"tls": ""
+	}
+]
