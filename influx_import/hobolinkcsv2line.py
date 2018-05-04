@@ -106,7 +106,9 @@ CREATE DATABASE dashboard
 
 def parse_utc_datetime(utc_dt_string):
     agnostic_time = strptime(utc_dt_string, '%m/%d/%y %H:%M:%S')
-    utc_datetime = datetime(*agnostic_time[0:7], timezone.utc)
+    time_parts = [part for part in agnostic_time[0:7]]
+    time_parts.append(timezone.utc)
+    utc_datetime = datetime(*time_parts)
     return utc_datetime
 
 def main():

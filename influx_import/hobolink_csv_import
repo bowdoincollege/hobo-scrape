@@ -4,7 +4,7 @@
 INFLUX_CONTAINER_NAME=dashboard-influxdb
 
 echo "exporting to line format..."
-python hobolinkcsv2line.py "$1" | gzip > import.influx.gz
+python3 hobolinkcsv2line.py "$1" | gzip > import.influx.gz
 
 echo "copying to container..."
 docker cp import.influx.gz ${INFLUX_CONTAINER_NAME}:/tmp
